@@ -1,7 +1,7 @@
 package com.apollo.renren.network.header;
 
 import android.support.annotation.Nullable;
-import android.util.ArrayMap;
+import android.support.v4.util.ArrayMap;
 
 public interface IHeaderManager {
     ArrayMap<String, String> getHeaders();

@@ -2,7 +2,7 @@ package com.apollo.renren.network.http;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.ArrayMap;
+import android.support.v4.util.ArrayMap;
 
 import com.apollo.renren.network.response.Callback;
 
@@ -13,9 +13,9 @@ import com.apollo.renren.network.response.Callback;
  * 如使用Retrofit，则创建RetrofitHttpManager，实现IHttpManager
  */
 public interface IHttpManager {
-    <T> void doGet(@NonNull String url, @Nullable ArrayMap<String, Object> params, @Nullable Callback<T> callback);
+    <T> void doGet(@NonNull String tag, @NonNull String url, @Nullable ArrayMap<String, Object> params, @Nullable Callback<T> callback);
 
-    <T> void doPost(@NonNull String url, @Nullable ArrayMap<String, Object> params, @Nullable Callback<T> callback);
+    <T> void doPost(@NonNull String tag,@NonNull String url, @Nullable ArrayMap<String, Object> params, @Nullable Callback<T> callback);
 
     void cancelRequestByTag(Object tag);
 

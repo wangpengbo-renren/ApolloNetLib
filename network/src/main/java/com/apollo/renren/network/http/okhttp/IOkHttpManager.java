@@ -1,6 +1,7 @@
-package com.apollo.renren.network.okhttp;
+package com.apollo.renren.network.http.okhttp;
 
-import android.util.ArrayMap;
+
+import android.support.v4.util.ArrayMap;
 
 import com.apollo.renren.network.http.IHttpManager;
 

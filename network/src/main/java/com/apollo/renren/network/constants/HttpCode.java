@@ -1,9 +1,12 @@
 package com.apollo.renren.network.constants;
 
+/**
+ * http状态码
+ */
 public class HttpCode {
-    public static final int CODE_SUCCESS = 0;
+    public static int CODE_SUCCESS = 0;
 
-    public static final int CODE_FAILURE = -1;
+    public static int CODE_FAILURE = -1;
 
-    public static final int UNKNOWN_HTTP_ERROR = -1000;
+    public static int UNKNOWN_HTTP_ERROR = -1000;
 }
