@@ -35,7 +35,7 @@ public class GsonUtil implements IParseUtil {
     @Override
     public <T> T parseInterfaceGenericJson(String json, Class clazz) {
         return mGson.fromJson(json, (((ParameterizedType)
-                (clazz.getClass().getGenericInterfaces())[0])
+                (clazz.getGenericInterfaces())[0])
                 .getActualTypeArguments()[0]));
     }
 

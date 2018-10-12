@@ -11,7 +11,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import static com.orhanobut.logger.Utils.checkNotNull;
+import static com.apollo.renren.network.logger.Utils.checkNotNull;
+
 
 /**
  * CSV formatted file logging for Android.

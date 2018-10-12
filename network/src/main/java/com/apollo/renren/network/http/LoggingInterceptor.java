@@ -17,7 +17,7 @@ public class LoggingInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
-        Logger.addLogAdapter(new AndroidLogAdapter());
+
         long t1 = System.nanoTime();
         Logger.i(String.format("Sending request %s on %s%n%s",
                 request.url(), chain.connection(), request.headers()));

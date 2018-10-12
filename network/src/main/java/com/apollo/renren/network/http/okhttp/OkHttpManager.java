@@ -160,6 +160,7 @@ public class OkHttpManager implements IOkHttpManager {
             if (responseCallback != null) {
                 if (response.body() != null) {
                     String json = response.body().string();
+                    Logger.i(json);
                     //解析bean
                     // TODO: 2018/10/11 若是jsonarray？
                     T bean = ParseUtil.parseInterfaceGenericJson(json, responseCallback.getClass());
