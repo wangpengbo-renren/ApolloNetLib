@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
     private PermissionUtils.PermissionGrant grant = requestCode -> {
         Logger.i("permission granted");
-        ApolloHttpUtil.getINSTANCE().doGet("https://wwww.sojson.com/open/api/lunar/json.shtml", null, new Callback<BaseBean>() {
+        ApolloHttpUtil.getINSTANCE().doGet("https://www.sojson.com/open/api/lunar/json.shtml", null, new Callback<BaseBean>() {
             @Override
             public void onSuccess(BaseBean bean, Response<BaseBean> response) {
                 Logger.i(response.getCode() + ":" + response.getMsg() + ":" + response.getData() );
