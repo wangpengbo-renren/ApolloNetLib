@@ -9,23 +9,30 @@ import com.apollo.renren.network.logger.Logger;
 import com.apollo.renren.network.response.Callback;
 import com.apollo.renren.network.response.Response;
 import com.apollo.renren.network.util.ApolloHttpUtil;
+import com.apollo.renren.network.util.PermissionUtils;
 
 public class MainActivity extends AppCompatActivity {
 
+    private PermissionUtils.PermissionGrant grant = requestCode -> {
+        Logger.i("permission granted");
+        ApolloHttpUtil.getINSTANCE().doGet("https://wwww.sojson.com/open/api/lunar/json.shtml", null, new Callback<BaseBean>() {
+            @Override
+            public void onSuccess(BaseBean bean, Response<BaseBean> response) {
+                Logger.i(response.getCode() + ":" + response.getMsg() + ":" + response.getData() );
+            }
+
+            @Override
+            public void onFailure(int errorCode, String errorMsg, Response<BaseBean> response) {
+                Logger.e(errorCode + ":" + errorMsg + ":" + response.getData());
+            }
+        });
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ApolloHttpUtil.getINSTANCE().doGet("http://api.map.baidu.com/telematics/v3/weather?location=嘉兴&output=json&ak=5slgyqGDENN7Sy7pw29IUvrZ", null, new Callback<TaobaoBean>() {
-            @Override
-            public void onSuccess(TaobaoBean bean, Response<TaobaoBean> response) {
-                Logger.i(bean != null ? bean.toString() : "" + response);
-            }
+        PermissionUtils.requestPermission(this, PermissionUtils.CODE_INTERNET,grant);
 
-            @Override
-            public void onFailure(int errorCode, String errorMsg, Response<TaobaoBean> response) {
-
-            }
-        });
     }
+
 }

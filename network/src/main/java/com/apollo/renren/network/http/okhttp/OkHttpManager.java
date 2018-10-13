@@ -11,6 +11,9 @@ import com.apollo.renren.network.http.HttpBuilder;
 import com.apollo.renren.network.http.LoggingInterceptor;
 import com.apollo.renren.network.logger.Logger;
 import com.apollo.renren.network.response.Callback;
+import com.apollo.renren.network.thread.ObserverListener;
+import com.apollo.renren.network.thread.OnErrorListener;
+import com.apollo.renren.network.thread.SubscribeListener;
 import com.apollo.renren.network.thread.ThreadManager;
 import com.apollo.renren.network.util.UrlUtil;
 import com.apollo.renren.network.util.parse.ParseUtil;
@@ -67,7 +70,8 @@ public class OkHttpManager implements IOkHttpManager {
                 .headers(getOkHttpHeaders(mHeaderManager.getHeaders()))
                 .url(UrlUtil.composeGetParams(url, params))
                 .build();
-        handleNetTask(request, callback);
+//        enqueueNetTask(request, callback);
+        executeNetTask(request,callback);
     }
 
     @Override
@@ -78,7 +82,8 @@ public class OkHttpManager implements IOkHttpManager {
                 .tag(tag)
                 .post(body)
                 .build();
-        handleNetTask(request, callback);
+//        enqueueNetTask(request, callback);
+        executeNetTask(request,callback);
     }
 
     @Override
@@ -112,13 +117,13 @@ public class OkHttpManager implements IOkHttpManager {
     }
 
     /**
-     * 执行网络请求
+     * 异步执行网络请求
      *
      * @param request          request对象
      * @param responseCallback 请求结果回调
      * @param <T>              泛型
      */
-    private <T> void handleNetTask(Request request, final Callback<T> responseCallback) {
+    private <T> void enqueueNetTask(Request request, final Callback<T> responseCallback) {
         mOkHttpClient.newCall(request)
                 .enqueue(new okhttp3.Callback() {
                     @Override
@@ -134,13 +139,24 @@ public class OkHttpManager implements IOkHttpManager {
     }
 
     /**
+     * 同步执行网络请求
+     * @param request
+     * @param responseCallback
+     * @param <T>
+     */
+    private <T> void executeNetTask(Request request, final Callback<T> responseCallback) {
+        Call call = mOkHttpClient.newCall(request);
+        ThreadManager.execute(() -> call.execute(), response -> handleResponse(response, responseCallback), error -> handleFailure(error,responseCallback));
+    }
+
+    /**
      * 处理失败
      *
      * @param e
      * @param responseCallback
      * @param <T>
      */
-    private <T> void handleFailure(IOException e, Callback<T> responseCallback) {
+    private <T> void handleFailure(Throwable e, Callback<T> responseCallback) {
         com.apollo.renren.network.response.Response<T> failureResponse = new com.apollo.renren.network.response.Response<>();
         failureResponse.setMsg(e.toString());
         onCallBack(failureResponse, responseCallback);
@@ -158,6 +174,8 @@ public class OkHttpManager implements IOkHttpManager {
 
         try {
             if (responseCallback != null) {
+                result.setCode(response.code());
+                result.setMsg(response.message());
                 if (response.body() != null) {
                     String json = response.body().string();
                     Logger.i(json);

@@ -17,13 +17,14 @@ public class ThreadManager {
      * @param <T>
      */
     public static <T> void execute(final SubscribeListener<T> subscribeListener,
-                                   ObserverListener<T> observerListener) {
+                                   ObserverListener<T> observerListener,
+                                   OnErrorListener onErrorListener) {
         Observable.create((ObservableOnSubscribe<T>) emitter -> {
             emitter.onNext(subscribeListener.runOnSubThread());
             emitter.onComplete();
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observerListener::runOnUIThread);
+                .subscribe(observerListener::runOnUIThread, e -> onErrorListener.onError (e));
     }
 
     /**

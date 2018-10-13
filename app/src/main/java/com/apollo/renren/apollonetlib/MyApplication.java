@@ -13,7 +13,7 @@ public class MyApplication extends Application {
         super.onCreate();
         //初始化http
         HttpManager.initHttpManager(new HttpBuilder()
-                .setCodeSuccess(0)
+                .setCodeSuccess(200)//访问成功响应码
                 .setConnectTimeOut(30 * 1000)
                 .setReadTimeOut(30 * 1000)
                 .setWriteTimeOut(30 * 1000));
