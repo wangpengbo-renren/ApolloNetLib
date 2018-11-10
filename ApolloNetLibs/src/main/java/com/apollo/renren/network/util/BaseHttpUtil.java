@@ -9,7 +9,11 @@ import com.apollo.renren.network.http.IHttpManager;
 import com.apollo.renren.network.response.Callback;
 
 public abstract class BaseHttpUtil implements IHttpManager {
-    private IHttpManager mHttpManager = HttpManager.getHttpManager();
+    private IHttpManager mHttpManager;
+
+    protected void refreshHttpManager() {
+        mHttpManager = HttpManager.getHttpManager();
+    }
 
     /**
      * Add algorithms of sign.

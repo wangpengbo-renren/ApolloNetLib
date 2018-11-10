@@ -1,6 +1,7 @@
 package com.apollo.renren.network.http;
 
 import com.apollo.renren.network.http.okhttp.OkHttpManager;
+import com.apollo.renren.network.http.retrofit.RetrofigManager;
 
 /**
  * 此类用于初始化http的一些设置，以及用于切换使用哪个http库，比如Okhttp和Retrofit等
@@ -13,10 +14,18 @@ public final class HttpManager {
      *
      * @param httpBuilder
      */
-    public static void initHttpManager(HttpBuilder httpBuilder) {
-        mHttpManager = new OkHttpManager(httpBuilder);
+    public static void initHttpManager(NetworkType type,HttpBuilder httpBuilder) {
+        switch (type) {
+            case OKHTTP:
+                mHttpManager = new OkHttpManager(httpBuilder);
+                break;
+            case RETROFIT:
+                mHttpManager = new RetrofigManager();
+                break;
+            case VOLLEY:
+                break;
+        }
 
-//        mHttpManager = new RetrofigManager();
     }
 
     /**

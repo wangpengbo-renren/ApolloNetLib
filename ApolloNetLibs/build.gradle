@@ -1,9 +1,12 @@
 apply plugin: 'com.android.library'
 
+//获取生成的产品名
+def getProductName() {
+    return "apollo_net_lib"
+}
+
 android {
     compileSdkVersion 28
-
-
 
     defaultConfig {
         minSdkVersion 15
@@ -21,6 +24,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    android.libraryVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = getProductName() + "_${defaultConfig.versionName}" + "_${variant.buildType.name}" + '.aar'
+        }
+    }
+
     compileOptions {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
