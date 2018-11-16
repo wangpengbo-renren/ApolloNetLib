@@ -11,6 +11,8 @@ import com.apollo.renren.network.http.HttpBuilder;
 import com.apollo.renren.network.http.LoggingInterceptor;
 import com.apollo.renren.network.logger.Logger;
 import com.apollo.renren.network.response.Callback;
+import com.apollo.renren.network.response.DownLoadListener;
+import com.apollo.renren.network.response.UploadListener;
 import com.apollo.renren.network.thread.ObserverListener;
 import com.apollo.renren.network.thread.OnErrorListener;
 import com.apollo.renren.network.thread.SubscribeListener;
@@ -71,7 +73,7 @@ public class OkHttpManager implements IOkHttpManager {
                 .url(UrlUtil.composeGetParams(url, params))
                 .build();
 //        enqueueNetTask(request, callback);
-        executeNetTask(request,callback);
+        executeNetTask(request, callback);
     }
 
     @Override
@@ -80,10 +82,36 @@ public class OkHttpManager implements IOkHttpManager {
         Request request = new Request.Builder()
                 .url(url)
                 .tag(tag)
+                .headers(getOkHttpHeaders(mHeaderManager.getHeaders()))
                 .post(body)
                 .build();
 //        enqueueNetTask(request, callback);
-        executeNetTask(request,callback);
+        executeNetTask(request, callback);
+    }
+
+    @Override
+    public <T> void doDelete(@NonNull String tag, @NonNull String url, @Nullable ArrayMap<String, Object> params, @Nullable Callback<T> callback) {
+
+    }
+
+    @Override
+    public <T> void doPut(@NonNull String tag, @NonNull String url, @Nullable ArrayMap<String, Object> params, @Nullable Callback<T> callback) {
+
+    }
+
+    @Override
+    public <T> void doPatch(@NonNull String tag, @NonNull String url, @Nullable ArrayMap<String, Object> params, @Nullable Callback<T> callback) {
+
+    }
+
+    @Override
+    public void doDownLoadFile(@NonNull String tag, @NonNull String url, @NonNull String savePath, @Nullable DownLoadListener downLoadListener) {
+
+    }
+
+    @Override
+    public void doUploadFile(@NonNull String tag, @NonNull String url, @NonNull String filePath, @Nullable UploadListener uploadListener) {
+
     }
 
     @Override
@@ -140,13 +168,14 @@ public class OkHttpManager implements IOkHttpManager {
 
     /**
      * 同步执行网络请求
+     *
      * @param request
      * @param responseCallback
      * @param <T>
      */
     private <T> void executeNetTask(Request request, final Callback<T> responseCallback) {
         Call call = mOkHttpClient.newCall(request);
-        ThreadManager.execute(() -> call.execute(), response -> handleResponse(response, responseCallback), error -> handleFailure(error,responseCallback));
+        ThreadManager.execute(() -> call.execute(), response -> handleResponse(response, responseCallback), error -> handleFailure(error, responseCallback));
     }
 
     /**
